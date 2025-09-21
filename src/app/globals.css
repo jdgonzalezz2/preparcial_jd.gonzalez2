@@ -1,0 +1,76 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --font-sans: var(--font-geist-sans);
+}
+
+:root {
+  --radius: 0.75rem;
+  --background: #000000;
+  --foreground: #ffffff;
+  --card: #000000;
+  --card-foreground: #ffffff;
+  --primary: #ffffff;
+  --primary-foreground: #000000;
+  --secondary: #111111;
+  --secondary-foreground: #ffffff;
+  --border: #ffffff;
+  --input: #ffffff;
+  --ring: #ffffff;
+}
+
+.dark {
+  --background: #000000;
+  --foreground: #ffffff;
+  --card: #000000;
+  --card-foreground: #ffffff;
+  --primary: #ffffff;
+  --primary-foreground: #000000;
+  --secondary: #111111;
+  --secondary-foreground: #ffffff;
+  --border: #ffffff;
+  --input: #ffffff;
+  --ring: #ffffff;
+}
+
+@layer base {
+  * { @apply border-border; }
+  *, *::before, *::after {
+    transition: color .2s, background-color .2s, border-color .2s,
+                fill .2s, stroke .2s, transform .2s, box-shadow .2s;
+  }
+  body {
+    @apply bg-background text-foreground min-h-screen;
+    -webkit-font-smoothing: antialiased;
+    background: var(--background);
+  }
+}
+
+@layer components {
+  .navbar-glass {
+    @apply sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-lg;
+  }
+  .btn-lift {
+    @apply transition-transform duration-200;
+  }
+  .btn-lift:hover {
+    @apply -translate-y-0.5 shadow-lg;
+  }
+}
+
+@keyframes fadeInUp {
+  from { opacity:0; transform:translateY(20px); }
+  to   { opacity:1; transform:translateY(0); }
+}
