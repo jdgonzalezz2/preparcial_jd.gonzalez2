@@ -10,16 +10,19 @@ import {
 
 interface AuthorState {
   authors: Author[];
+  favorites: Set<number>;
   loading: boolean;
   error: string | null;
   loadAuthors: () => Promise<void>;
   addAuthor: (data: AuthorData) => Promise<void>;
   editAuthor: (id: number, data: Partial<AuthorData>) => Promise<void>;
   removeAuthor: (id: number) => Promise<void>;
+  toggleFavorite: (id: number) => void;
 }
 
 export const useAuthorStore = create<AuthorState>((set) => ({
   authors: [],
+  favorites: new Set(),
   loading: true,
   error: null,
 
@@ -48,9 +51,29 @@ export const useAuthorStore = create<AuthorState>((set) => ({
   },
 
   removeAuthor: async (id) => {
-    await deleteAuthor(id);
-    set((state) => ({
-      authors: state.authors.filter((author) => author.id !== id),
-    }));
+    if (window.confirm("Are you sure you want to delete this author?")) {
+        await deleteAuthor(id);
+        set((state) => {
+            const newFavorites = new Set(state.favorites);
+            newFavorites.delete(id);
+            return {
+                authors: state.authors.filter((author) => author.id !== id),
+                favorites: newFavorites,
+            };
+        });
+    }
+  },
+  
+  toggleFavorite: (id: number) => {
+    set((state) => {
+      const newFavorites = new Set(state.favorites); 
+      
+      if (newFavorites.has(id)) {
+        newFavorites.delete(id);
+      } else {
+        newFavorites.add(id);
+      }
+      return { favorites: newFavorites };
+    });
   },
 }));
